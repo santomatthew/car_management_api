@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { Account } = require("../../models");
-
+const decryptPass = require("../encrypt-decrypt/decrypt-pass");
 async function login(req, res) {
   try {
     let checkIfExist = await Account.findOne({
@@ -12,10 +12,11 @@ async function login(req, res) {
       let validation = await Account.findOne({
         where: { id: idGenerator },
       });
-      if (
-        req.body.email === validation.email &&
-        req.body.password === validation.password
-      ) {
+      let checkPassword = await decryptPass(
+        validation.password,
+        req.body.password
+      );
+      if (req.body.email === validation.email && checkPassword) {
         let user = {
           id: validation.id,
           email: validation.email,
