@@ -10,8 +10,6 @@ async function adminGet(req, res) {
     list.push({
       id: listadmin[i].id,
       email: listadmin[i].email,
-      createdAt: listadmin[i].createdAt,
-      updatedAt: listadmin[i].updatedAt,
     });
   }
   res.send(list);

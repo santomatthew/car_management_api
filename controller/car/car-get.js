@@ -16,6 +16,7 @@ async function carGet(req, res) {
       listOfCars.push({
         name: listCars[i].name,
         photo: listCars[i].photo,
+        price: listCars[i].price,
         size: listCars[i].size_id,
         created_by: user.email,
         updated_by: user2.email,
