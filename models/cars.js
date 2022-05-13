@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     size_id: DataTypes.INTEGER,
     created_by: DataTypes.INTEGER,
     updated_by: DataTypes.INTEGER,
-    is_deleted: DataTypes.BOOLEAN
+    is_deleted: DataTypes.BOOLEAN,
+    deleted_by: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Cars',

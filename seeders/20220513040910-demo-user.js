@@ -1,5 +1,6 @@
 "use strict";
 
+const controller = require("../controller");
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -14,7 +15,7 @@ module.exports = {
     await queryInterface.bulkInsert("accounts", [
       {
         email: "superadmin@gmail.com",
-        password: "12345678",
+        password: await controller.encryptPass("12345678"),
         role: "superadmin",
         created_at: new Date(),
         updated_at: new Date(),

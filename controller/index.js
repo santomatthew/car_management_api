@@ -19,4 +19,6 @@ module.exports = {
   memberRegister: require("./member/member-register"),
   // User
   userCurrent: require("./user/user-current"),
+  // Encrypt for seeders data
+  encryptPass: require("./encrypt-decrypt/encrypt-pass"),
 };
