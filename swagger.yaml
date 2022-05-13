@@ -1,0 +1,354 @@
+openapi: 3.0.0
+info:
+  title: Challenge 06
+  version: 1.0.0
+  description: |
+    Car Management API
+tags:
+  - name: Login
+  - name: Car Management
+  - name: Account Management
+servers:
+  - description: Mock API
+    url: http://localhost:8000
+
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        email:
+          type: string
+          example: superadmin@gmail.com
+        password:
+          type: string
+          example: 12345678
+
+    AdminAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: admin1@gmail.com
+
+    CarOutput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Avanza
+        photo:
+          type: string
+          example: https://google.com/image.png
+        price:
+          type: number
+          format: float
+          example: 100000.2
+        size_id:
+          type: integer
+          example: 1
+        created_by:
+          type: string
+          example: admin@gmail.com
+        updated_by:
+          type: string
+          example: admin@gmail.com
+
+    CarInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Avanza
+        photo:
+          type: string
+          example: https://google.com/image.png
+        price:
+          type: number
+          format: float
+          example: 100000.2
+        size:
+          type: integer
+          example: 1
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          example: kjn45g9845nmvi948m90
+        expires_in:
+          type: number
+          example: 3600
+
+    ID:
+      type: integer
+      example: 1
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  requestBodies:
+    LoginRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Account"
+
+    RegisterAccount:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Account"
+
+    CarRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CarInput"
+
+  responses:
+    LoginResponse:
+      description: ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Token"
+
+    CarResponse:
+      description: List All Cars
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CarOutput"
+          examples:
+            DefaultSample:
+              value:
+                - name: Mobil1,
+                  photo: img1.png,
+                  price: 80000,
+                  size: 1,
+                  created_by: superadmin@gmail.com
+                  updated_by: superadmin@gmail.com
+
+                - name: Mobil2,
+                  photo: img2.png,
+                  price: 80000,
+                  size: 1,
+                  created_by: superadmin@gmail.com
+                  updated_by: superadmin@gmail.com
+
+                - name: Mobil3,
+                  photo: img3.png,
+                  price: 80000,
+                  size: 1,
+                  created_by: superadmin@gmail.com
+                  updated_by: admin@gmail.com
+    AdminResponse:
+      description: List All Admin
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/AdminAccount"
+          examples:
+            DefaultSample:
+              value:
+                - id: 3,
+                  email: admin1@gmail.com
+                - id: 4,
+                  email: admin2@gmail.com
+
+paths:
+  # Endpoint Login
+  /api/v1/login:
+    post:
+      tags:
+        - Login
+      summary: Login
+      description: Login endpoint
+      requestBody:
+        description: Request Login
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+      responses:
+        200:
+          description: Response Login Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+
+  # Endpoint untuk Superadmin
+  /api/v1/admins:
+    # Create admin account by Superadmin
+    post:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/RegisterAccount"
+      responses:
+        200:
+          description: OK
+    # Get list of admin account by Superadmin
+    get:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          $ref: "#/components/responses/AdminResponse"
+
+  /api/v1/admins/{id}:
+    # Get admin account by id by Superadmin
+    get:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: Ok
+    # Update admin account by id by Superadmin
+    put:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: OK
+    # Soft Delete admin account by id by Superadmin
+    delete:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: OK
+
+  #Endpoint untuk Admin
+  /api/v1/cars:
+    # Create new car data by Admin & Superadmin
+    post:
+      tags:
+        - Car Management
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/CarRequest"
+      responses:
+        200:
+          description: ok
+    # Get list of cars data by all role
+    get:
+      tags:
+        - Car Management
+      responses:
+        200:
+          $ref: "#/components/responses/CarResponse"
+
+  /api/v1/cars/{id}:
+    # Get car by id by Admin & Superadmin
+    get:
+      tags:
+        - Car Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: Ok
+    # Update car data by Admin & Superadmin
+    put:
+      tags:
+        - Car Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: Ok
+    # Soft delete car data by Admin & Superadmin
+    delete:
+      tags:
+        - Car Management
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/ID"
+          required: true
+      responses:
+        200:
+          description: OK
+  /api/v1/register:
+    post:
+      tags:
+        - Account Management
+      requestBody:
+        $ref: "#/components/requestBodies/RegisterAccount"
+      responses:
+        200:
+          description: OK
+
+  /api/v1/profile:
+    get:
+      tags:
+        - Account Management
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: OK
+          content:
+            type: object
+            properties:
+              email:
+                type: string
+                example: superadmin@gmail.com
