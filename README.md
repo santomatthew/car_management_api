@@ -2,6 +2,13 @@
 
 Car Management API (Backend Only)
 
+- Superadmin
+
+```
+email = superadmin@gmail.com
+password = 12345678
+```
+
 ## 🚀Features
 
 - ### Account Management ❗
