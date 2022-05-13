@@ -1,4 +1,5 @@
 const { Cars } = require("../../models");
+const jwt = require("jsonwebtoken");
 async function carDelete(req, res) {
   try {
     if (!req.params.id) {
@@ -9,8 +10,10 @@ async function carDelete(req, res) {
       });
 
       if (checkIfExist) {
+        let header = req.headers.authorization.split("Bearer ")[1];
+        let account = jwt.verify(header, "s3cr3t");
         await Cars.update(
-          { is_deleted: true },
+          { is_deleted: true, deleted_by: account.id },
           { where: { id: req.params.id } }
         );
         res.send("Data car berhasil di hapus");

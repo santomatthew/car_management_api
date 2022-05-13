@@ -1,6 +1,5 @@
 const { Cars } = require("../../models");
 const jwt = require("jsonwebtoken");
-// const { json } = require("sequelize/types");
 
 async function carPut(req, res) {
   try {

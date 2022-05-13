@@ -5,7 +5,16 @@ async function adminGet(req, res) {
     where: { role: "admin", is_deleted: false },
   });
 
-  res.send(listadmin);
+  let list = [];
+  for (let i in listadmin) {
+    list.push({
+      id: listadmin[i].id,
+      email: listadmin[i].email,
+      createdAt: listadmin[i].createdAt,
+      updatedAt: listadmin[i].updatedAt,
+    });
+  }
+  res.send(list);
 }
 
 module.exports = adminGet;
