@@ -32,18 +32,26 @@ Car Management API (Backend Only)
 
 ## 🏃How to Run (Installation)
 
-- soon
-
-## 🌴Tree (Directory Structure)
-
 ```
-soon
-
+yarn install
+yarn sequelize-cli db:create
+yarn migrate
+yarn sequelize-cli db:seed:all
+yarn start
 ```
 
 ## 🔍Endpoints
 
-- soon
+```
+- /docs = API Documentation & testing
+- /api/v1/login = Login
+- /api/v1/admins = Post & Get Admin Account
+- /api/v1/admins/:id = Get by id, Put, Delete(Soft Delete) Admin Account
+- /api/v1/cars = Post & Get Car Data
+- /api/v1/cars/:id = Get by id, Put, Delete(Soft Delete) Car Data
+- /api/v1/register = Post Member Account
+- /api/v1/profile = Get current login account
+```
 
 ## ⭐Tech
 
@@ -61,4 +69,4 @@ soon
 
 ## 📌Entity Relationship Diagram
 
-- soon
+<img src="erd.png">
